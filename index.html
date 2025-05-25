@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de contas guests- Free Fire</title>
+  <style>
+    body { background: #0e0e0e; color: #fff; font-family: monospace; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: #1c1c1c; padding: 20px; border-radius: 10px; }
+    button { background: #A72828; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; margin-top: 10px; cursor: pointer; }
+    pre { background: #2a2a2a; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-break: break-word; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>GERADOR DE CONTAS GUESTS</h2></h2>
+    <h2>@chazin999</h2>
+    <button onclick="gerarConta()">Gerar Conta Guest</button>
+    <button onclick="baixarDat()">Salvar como .dat</button>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    let jsonData = "";
+
+    function gerarHex(length) {
+      const chars = "0123456789ABCDEF";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return result;
+    }
+
+    function gerarConta() {
+      const uid = Math.floor(Math.random() * 1e10).toString();
+      const password = gerarHex(64);
+      const obj = {
+        guest_account_info: {"com.garena.msdk.guest_password": password,"com.garena.msdk.guest_uid": uid}};
+      jsonData = JSON.stringify(obj, null, 2);
+      document.getElementById("output").textContent = jsonData;
+    }
+
+    function baixarDat() {
+      if (!jsonData) {
+        alert("Gere os dados primeiro!");
+        return;
+      }
+
+      const blob = new Blob([jsonData], { type: 'application/dat' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "guest_account.dat";
+      link.click();
+    }
+  </script>
+</body>
+</html>
